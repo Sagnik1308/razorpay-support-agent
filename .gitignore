@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+
+# Virtual environment
+.venv/
+venv/
+
+# Environment & secrets
+.env
+*.json
+*.csv
+
+# Data & index files
+data/index.faiss
+data/docs.jsonl
+
+# Node / frontend artifacts (if any later)
+node_modules/
+dist/
+build/

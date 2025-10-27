@@ -1,0 +1,55 @@
+import os, requests
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
+from models import ChatRequest, ChatResponse, FeedbackRequest, Source
+from rag import retrieve
+from prompts import SYSTEM_PROMPT, ANSWER_PROMPT
+
+load_dotenv()
+
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+CHAT_MODEL = os.getenv("CHAT_MODEL", "gpt-4o-mini")
+ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "*")
+
+app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+@app.get("/health")
+def health():
+    return {"ok": True}
+
+@app.post("/chat", response_model=ChatResponse)
+def chat(req: ChatRequest):
+    hits = retrieve(req.message)
+    context = "\n\n".join([f"[{i+1}] {h['text'][:800]}" for i, h in enumerate(hits)])
+    prompt = ANSWER_PROMPT.format(context=context, question=req.message)
+
+    r = requests.post(
+        "https://api.openai.com/v1/chat/completions",
+        headers={"Authorization": f"Bearer {OPENAI_API_KEY}", "Content-Type": "application/json"},
+        json={
+            "model": CHAT_MODEL,
+            "messages": [
+                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "user", "content": prompt},
+            ],
+            "temperature": 0.2,
+        },
+    )
+    if r.status_code != 200:
+        raise HTTPException(status_code=500, detail=r.text)
+
+    answer = r.json()["choices"][0]["message"]["content"]
+    sources = [Source(url=h["url"], score=h["score"]) for h in hits[:2]]
+    return ChatResponse(
+        answer=answer,
+        sources=sources,
+        suggested_quick_replies=["Refund timelines", "KYC requirements", "Talk to a human"],
+        escalatable=True,
+    )

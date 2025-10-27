@@ -1,0 +1,5 @@
+https://razorpay.com/docs/payments/
+https://razorpay.com/docs/payments/refunds/
+https://razorpay.com/docs/payments/settlements/
+https://razorpay.com/docs/payments/links/
+https://razorpay.com/docs/account/kyc/
