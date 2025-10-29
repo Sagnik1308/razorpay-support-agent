@@ -54,7 +54,7 @@ def chat(req: ChatRequest):
         escalatable=True,
     )
 
-from sheets_utils import append_to_sheet
+from backend.sheets_utils import append_to_sheet
 
 @app.post("/feedback")
 def feedback(req: FeedbackRequest):
