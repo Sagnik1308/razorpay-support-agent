@@ -2,8 +2,8 @@ import os, requests
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
-from models import ChatRequest, ChatResponse, FeedbackRequest, Source
-from rag import retrieve
+from backend.models import ChatRequest, ChatResponse, FeedbackRequest, Source
+from backend.rag import retrieve
 from prompts import SYSTEM_PROMPT, ANSWER_PROMPT
 
 load_dotenv()
