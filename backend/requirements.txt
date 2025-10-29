@@ -3,7 +3,7 @@ uvicorn[standard]==0.30.6
 tqdm==4.66.5
 beautifulsoup4==4.12.3
 requests==2.32.3
-faiss-cpu==1.8.0.post1
+faiss-cpu==1.12.0
 numpy==1.26.4
 python-dotenv==1.0.1
 gspread==6.1.4
