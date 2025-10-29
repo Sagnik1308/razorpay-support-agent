@@ -53,3 +53,14 @@ def chat(req: ChatRequest):
         suggested_quick_replies=["Refund timelines", "KYC requirements", "Talk to a human"],
         escalatable=True,
     )
+
+from sheets_utils import append_to_sheet
+
+@app.post("/feedback")
+def feedback(req: FeedbackRequest):
+    try:
+        append_to_sheet(req.name, req.email, req.question, req.session_id)
+        return {"success": True, "message": "Feedback logged successfully"}
+    except Exception as e:
+        print("❌ Sheets error:", e)
+        raise HTTPException(status_code=500, detail=str(e))

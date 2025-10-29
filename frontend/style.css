@@ -1,0 +1,31 @@
+:root { --bg:#0f172a; --card:#111827; --muted:#94a3b8; --accent:#2563eb; --ghost:#1f2937; --border:#1f2937; }
+* { box-sizing: border-box; }
+body { margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto; background: var(--bg); color: #e5e7eb; }
+.app { max-width: 800px; margin: 0 auto; min-height: 100vh; display: grid; grid-template-rows: auto 1fr auto; gap: 12px; padding: 16px; }
+
+header { display:flex; align-items:center; justify-content:space-between; padding:12px 16px; background: var(--card); border:1px solid var(--border); border-radius: 12px; }
+.title { font-weight: 700; }
+.status { font-size: 12px; color: var(--muted); }
+
+main#chat { background: var(--card); border:1px solid var(--border); border-radius: 12px; padding: 16px; overflow:auto; display:flex; flex-direction:column; gap:12px; }
+.msg { display:flex; }
+.msg.user { justify-content: flex-end; }
+.bubble { max-width: 80%; padding: 10px 12px; border-radius: 12px; line-height: 1.45; border:1px solid var(--border); }
+.msg.user .bubble { background: #0b1324; }
+.msg.bot .bubble { background: #0e1a31; }
+.meta { margin-top: 6px; font-size: 12px; color: var(--muted); }
+
+.composer { display:flex; gap:8px; }
+.composer input { flex:1; height:44px; border-radius:10px; border:1px solid var(--border); background:#0b1020; color:#e5e7eb; padding:0 12px; }
+button { height:44px; border-radius:10px; border:1px solid var(--border); background: var(--accent); color:white; font-weight:600; cursor:pointer; }
+button.ghost { background: var(--ghost); color:#cbd5e1; }
+button:disabled { opacity:.6; cursor:not-allowed; }
+
+.sheet-panel { position: fixed; inset: 0; background: rgba(2,6,23,.6); display: grid; place-items: center; }
+.sheet-panel.hidden { display:none; }
+.panel-card { width: 100%; max-width: 520px; background: var(--card); border:1px solid var(--border); border-radius: 14px; padding:16px; display:grid; gap:10px; }
+.panel-title { font-weight: 700; margin-bottom: 6px; }
+label { display:grid; gap:6px; font-size: 14px; color:#cbd5e1; }
+input, textarea { border-radius:8px; border:1px solid var(--border); background:#0b1020; color:#e5e7eb; padding:10px; }
+.panel-actions { display:flex; gap:8px; justify-content:flex-end; margin-top:6px; }
+.sheet-result { font-size: 13px; color:#a7f3d0; }
