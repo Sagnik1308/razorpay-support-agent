@@ -64,3 +64,10 @@ def feedback(req: FeedbackRequest):
     except Exception as e:
         print("❌ Sheets error:", e)
         raise HTTPException(status_code=500, detail=str(e))
+
+# --- Static frontend (serves /frontend as the site root) ---
+from fastapi.staticfiles import StaticFiles
+import os
+
+frontend_path = os.path.join(os.path.dirname(__file__), "../frontend")
+app.mount("/", StaticFiles(directory=frontend_path, html=True), name="frontend")

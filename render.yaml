@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: razorpay-support-agent
+    env: python
+    plan: free
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: uvicorn backend.server:app --host 0.0.0.0 --port 10000
+    envVars:
+      - key: PORT
+        value: 10000
