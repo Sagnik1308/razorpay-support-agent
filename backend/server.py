@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 from backend.models import ChatRequest, ChatResponse, FeedbackRequest, Source
 from backend.rag import retrieve
-from prompts import SYSTEM_PROMPT, ANSWER_PROMPT
+from backend.prompts import SYSTEM_PROMPT, ANSWER_PROMPT
 
 load_dotenv()
 
