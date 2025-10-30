@@ -1,96 +1,121 @@
-🏦 Razorpay Support AI Agent
+# 🏦 Razorpay Support AI Agent  
 
-An AI-powered customer-support assistant for a mid-sized fintech company (inspired by Razorpay).
-The agent answers customer queries using a knowledge base built from the Razorpay Docs and allows users to escalate unresolved questions to a human agent via Google Sheets.
+An AI-powered customer-support assistant for a mid-sized fintech company (inspired by Razorpay).  
+The agent answers customer queries using a knowledge base built from the Razorpay Docs and allows users to escalate unresolved questions to a human agent via Google Sheets.  
+---
 
-🚀 Features
+## 🚀 Features
+- **RAG-based response system:** Uses OpenAI embeddings + FAISS vector search to answer questions from Razorpay documentation.  
+- **FastAPI backend:** Serves endpoints for chat, feedback, and health checks.  
+- **Google Sheets integration:** Automatically logs user name, email, and query when they request human support.  
+- **Frontend chat UI:** Simple HTML, CSS, and JS interface for interactive Q&A.  
+- **Deployed on cloud (Render / Railway):** End-to-end functional deployment.  
+---
 
-RAG-based response system: Uses OpenAI embeddings + FAISS vector search to answer questions from Razorpay documentation.
+## 🧠 Tech Stack
 
-FastAPI backend: Serves endpoints for chat, feedback, and health checks.
+| Layer | Technology |
+|--------|-------------|
+| **Backend** | FastAPI, Python |
+| **AI / NLP** | OpenAI API (GPT-4o-mini, text-embedding-3-small) |
+| **Vector Store** | FAISS |
+| **Database / Storage** | Google Sheets API |
+| **Frontend** | HTML, CSS, JavaScript |
+| **Deployment** | Render (or Railway) |
+| **Environment** | Virtualenv, dotenv |
+---
 
-Google Sheets integration: Automatically logs user name, email, and query when they request human support.
-
-Frontend chat UI: Simple HTML, CSS, and JS interface for interactive Q&A.
-
-Deployed on cloud (Render / Railway): End-to-end functional deployment.
-
-🧠 Tech Stack
-Layer	Tools Used
-Language	Python
-Framework	FastAPI
-Vector Search	FAISS-CPU
-LLM Integration	OpenAI GPT-4o-mini
-Data Storage	Google Sheets API
-Frontend	HTML, CSS, JavaScript
-Deployment	Render (switchable to Railway)
-📁 Project Structure
+## 📂 Project Structure
+```
 razorpay-support-agent/
 │
 ├── backend/
-│   ├── server.py          # FastAPI server (chat + feedback APIs)
-│   ├── models.py          # Pydantic models for request/response
-│   ├── rag.py             # RAG pipeline (embedding + retrieval)
-│   ├── prompts.py         # System and answer prompt templates
-│   ├── sheets_utils.py    # Google Sheets integration
+│   ├── server.py          # FastAPI app (main entry point)
+│   ├── models.py          # Pydantic models for requests/responses
+│   ├── rag.py             # Retrieval-Augmented Generation logic
 │   ├── ingest.py          # Builds FAISS index from Razorpay docs
-│   └── .env.example       # Example environment variables
+│   ├── sheets_utils.py    # Handles Google Sheets integration
+│   ├── prompts.py         # System and answer prompts
+│   ├── .env.example       # Example environment variables
+│   └── requirements.txt   # Backend dependencies
 │
 ├── frontend/
-│   ├── index.html
-│   ├── script.js
-│   └── style.css
+│   ├── index.html         # Chat interface
+│   ├── script.js          # Handles API calls
+│   └── style.css          # Styling for chat UI
 │
-└── render.yaml            # Render deployment config
+└── README.md
+```
+---
 
-⚙️ Environment Variables
-Variable	Description
-OPENAI_API_KEY	Your OpenAI API key
-EMBEDDING_MODEL	text-embedding-3-small
-CHAT_MODEL	gpt-4o-mini
-GOOGLE_SHEETS_SPREADSHEET_NAME	Google Sheet name for feedback logs
-GOOGLE_SERVICE_ACCOUNT_JSON	Path to service account key file
-PORT	Default 8000
-FINTECH_BRAND	“Razorpay”
-🧩 API Endpoints
-Endpoint	Method	Description
-/health	GET	Sanity check
-/chat	POST	Get AI response to a user query
-/feedback	POST	Log user details in Google Sheet
-💬 Example
+## ⚙️ Setup & Run Instructions
 
-Request:
+### 1️⃣ Clone the Repository
+```bash
+git clone https://github.com/<your-username>/razorpay-support-agent.git
+cd razorpay-support-agent/backend
+```
 
-{
-  "session_id": "123",
-  "message": "How long does Razorpay settlement take?"
-}
+### 2️⃣ Create & Activate Virtual Environment
+```bash
+python3 -m venv .venv
+source .venv/bin/activate   # (Mac/Linux)
+```
 
-
-Response:
-
-{
-  "answer": "Razorpay settlements typically take T+2 days...",
-  "sources": [{"url": "https://razorpay.com/docs/payments/settlements/"}],
-  "suggested_quick_replies": ["Refund timelines", "KYC requirements"]
-}
-
-🌐 Deployment
-
-Backend: FastAPI on Render / Railway
-
-Frontend: Served from same app root
-
-Knowledge Base: Embedded from Razorpay Docs
-
-🧰 Setup (Local)
-cd backend
-python -m venv .venv
-source .venv/bin/activate
+### 3️⃣ Install Dependencies
+```bash
 pip install -r requirements.txt
-cp .env.example .env
-python ingest.py  # builds embeddings
+```
+
+### 4️⃣ Create `.env` File
+Copy `.env.example` → `.env` and fill in your credentials:
+```
+OPENAI_API_KEY=sk-xxxx
+GOOGLE_SERVICE_ACCOUNT_JSON=/path/to/service_account.json
+GOOGLE_SHEETS_SPREADSHEET_NAME=Fintech Support Escalations
+```
+
+### 5️⃣ Build the Vector Index
+```bash
+python ingest.py
+```
+
+### 6️⃣ Run the Server
+```bash
 uvicorn backend.server:app --reload
+```
 
+### 7️⃣ Test API Endpoints
+Visit:
+- ✅ `/health` → Health check  
+- 💬 `/chat` → Chat endpoint  
+- 🧾 `/feedback` → Submit feedback  
+---
 
-Then open frontend/index.html in browser.
+## 🧩 API Endpoints Summary
+
+| Endpoint | Method | Description |
+|-----------|--------|--------------|
+| `/health` | **GET** | Basic health check for the server |
+| `/chat` | **POST** | Takes a user query, retrieves relevant context from Razorpay docs (via FAISS), and returns an AI-generated answer |
+| `/feedback` | **POST** | Collects user name, email, and query, then logs the details into Google Sheets |
+---
+
+## ✨ Features Summary
+
+- 🤖 **AI-Powered Chat Support:** Answers customer questions using a knowledge base built from Razorpay’s official documentation.  
+- 💬 **Conversational Flow:** Maintains natural, human-like dialogue for smoother support interactions.  
+- 📚 **Retrieval-Augmented Generation (RAG):** Uses FAISS-based document search + GPT reasoning to give accurate, contextual answers.  
+- 📈 **Google Sheets Integration:** Escalated queries are automatically logged (with user name, email, and message).  
+- ⚡ **Fast & Lightweight:** Built with FastAPI for quick responses and low latency.  
+- 🧠 **Customizable Knowledge Base:** Can easily be trained on any fintech company’s docs or internal FAQs.  
+- 🌐 **Frontend Chat UI:** Simple web-based interface built using HTML, CSS, and JavaScript.  
+---
+
+## 🔮 Future Improvements
+
+- 🧩 **Add OAuth Authentication:** Secure admin access for managing escalation logs and chat analytics.  
+- 🌍 **Multi-Language Support:** Extend AI responses to Hindi and other regional languages.  
+- 📊 **Analytics Dashboard:** Track query types, response times, and customer satisfaction.  
+- 🧠 **Fine-Tuned Model:** Train a domain-specific model using Razorpay FAQs for even higher accuracy.  
+- ☁️ **Improved Deployment:** Move from Render to Railway or Dockerize for production reliability.  
