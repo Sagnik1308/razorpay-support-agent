@@ -1,1 +1,0 @@
-web: python3 -m pip install -r backend/requirements.txt && uvicorn backend.server:app --host 0.0.0.0 --port 8000
