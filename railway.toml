@@ -1,5 +1,5 @@
 [build]
-builder = "python"
+nixpacksPlan = true
 
 [deploy]
-start = "uvicorn backend.server:app --host 0.0.0.0 --port 8000"
+startCommand = "uvicorn backend.server:app --host 0.0.0.0 --port 8000"
