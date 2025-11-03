@@ -1,3 +1,5 @@
+# Force rebuild
+
 [build]
 builder = "NIXPACKS"
 buildCommand = "pip install -r backend/requirements.txt"
